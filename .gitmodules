@@ -1,0 +1,9 @@
+[submodule "sml"]
+	path = sml
+	url = https://github.com/boost-experimental/sml.git
+[submodule "di"]
+	path = di
+	url = https://github.com/boost-experimental/di.git
+[submodule "googletest"]
+	path = googletest
+	url = https://github.com/google/googletest.git
