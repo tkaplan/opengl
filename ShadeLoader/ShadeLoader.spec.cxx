@@ -1,4 +1,9 @@
 #include "gtest/gtest.h"
+#include <fstream>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+
+#include "ShadeLoader.hxx"
 
 namespace {
 
@@ -33,13 +38,45 @@ class ShadeLoaderTest : public ::testing::Test {
 };
 
 // Tests that the Foo::Bar() method does Abc.
-TEST_F(ShadeLoaderTest, MethodBarDoesAbc) {
+TEST_F(ShadeLoaderTest, LoadsFragment) {
+	std::ifstream fragment{"Shaders/fragment.glsl", std::ios::in};
+	if (not fragment.is_open()) FAIL();
+	TK::ShadeLoader shader{};
+	shader.template add_shader<TK::FragmentShader>(fragment);
+	fragment.close();
+}
 
+TEST_F(ShadeLoaderTest, LoadsVertex) {
+	std::ifstream vertex{"Shaders/vertex.glsl", std::ios::in};
+	if (not vertex.is_open()) FAIL();
+	TK::ShadeLoader shader{};
+	shader.template add_shader<TK::VertexShader>(vertex);
+	vertex.close();
+}
+
+TEST_F(ShadeLoaderTest, LinkShaders) {
+	TK::ShadeLoader shader{};
+
+	// Vertex Shader
+	std::ifstream vertex{"Shaders/vertex.glsl", std::ios::in};
+	if (not vertex.is_open()) FAIL();
+	shader.template add_shader<TK::VertexShader>(vertex);
+	vertex.close();
+	// Fragment Shader
+	std::ifstream fragment{"Shaders/fragment.glsl", std::ios::in};
+	if (not fragment.is_open()) FAIL();
+	shader.template add_shader<TK::FragmentShader>(fragment);
+	fragment.close();
+
+	shader.compile();
 }
 
 }  // namespace
 
 int main(int argc, char **argv) {
+  glutInit(&argc, argv);
+  glutCreateWindow("");
+  glewInit();
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
