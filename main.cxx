@@ -34,6 +34,10 @@ constexpr auto getProgramId = []() noexcept {
     std::ifstream vertex{"Shaders/vertex.glsl", std::ios::in};
     shader.template add_shader<TK::VertexShader>(vertex);
     vertex.close();
+    // Geometry Shader
+    std::ifstream geometry{"Shaders/geometry.glsl", std::ios::in};
+    shader.template add_shader<TK::GeometryShader>(geometry);
+    geometry.close();
     // Fragment Shader
     std::ifstream fragment{"Shaders/fragment.glsl", std::ios::in};
     shader.template add_shader<TK::FragmentShader>(fragment);
